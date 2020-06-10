@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FinalExamNew.Migrations.FinalExamDb
 {
     [DbContext(typeof(FinalExamDbContext))]
-    [Migration("20200405161728_CustomUserData2")]
-    partial class CustomUserData2
+    [Migration("20200412095844_DbMigratin")]
+    partial class DbMigratin
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -103,16 +103,13 @@ namespace FinalExamNew.Migrations.FinalExamDb
                     b.Property<string>("KljucneReciOglasaId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("KljucnaRecId1");
+                    b.Property<string>("KljucnaRecId");
 
-                    b.Property<string>("OglasId")
-                        .IsRequired();
+                    b.Property<string>("OglasId");
 
                     b.HasKey("KljucneReciOglasaId");
 
-                    b.HasAlternateKey("KljucneReciOglasaId", "OglasId");
-
-                    b.HasIndex("KljucnaRecId1");
+                    b.HasIndex("KljucnaRecId");
 
                     b.HasIndex("OglasId");
 
@@ -145,46 +142,42 @@ namespace FinalExamNew.Migrations.FinalExamDb
 
             modelBuilder.Entity("FinalExamNew.Dal.Oglasavanje", b =>
                 {
-                    b.Property<string>("OglasId")
+                    b.Property<string>("OglasavanjeId")
                         .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("DatumDo");
 
                     b.Property<DateTime>("DatumOd");
 
-                    b.Property<string>("OglasId1");
+                    b.Property<string>("OglasId");
 
-                    b.Property<string>("OglasavanjeId")
-                        .IsRequired();
+                    b.Property<string>("TipOglasaId");
 
-                    b.Property<string>("TipOglasaId1");
+                    b.HasKey("OglasavanjeId");
 
-                    b.HasKey("OglasId");
+                    b.HasIndex("OglasId");
 
-                    b.HasAlternateKey("OglasavanjeId", "OglasId");
-
-                    b.HasIndex("OglasId1");
-
-                    b.HasIndex("TipOglasaId1");
+                    b.HasIndex("TipOglasaId");
 
                     b.ToTable("Oglasavanje");
                 });
 
             modelBuilder.Entity("FinalExamNew.Dal.Slika", b =>
                 {
-                    b.Property<string>("SlikaId");
-
-                    b.Property<string>("OglasId");
+                    b.Property<string>("SlikaId")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("AdresaSlike");
 
                     b.Property<string>("NaslovSlike");
 
+                    b.Property<string>("OglasId");
+
                     b.Property<DateTime>("VremePostavljanjaSlike");
 
-                    b.HasKey("SlikaId", "OglasId");
+                    b.HasKey("SlikaId");
 
-                    b.HasAlternateKey("OglasId", "SlikaId");
+                    b.HasIndex("OglasId");
 
                     b.ToTable("Slika");
                 });
@@ -209,12 +202,11 @@ namespace FinalExamNew.Migrations.FinalExamDb
                 {
                     b.HasOne("FinalExamNew.Dal.KljucnaRec", "KljucnaRec")
                         .WithMany("KljucneReciOglasa")
-                        .HasForeignKey("KljucnaRecId1");
+                        .HasForeignKey("KljucnaRecId");
 
                     b.HasOne("FinalExamNew.Dal.Oglas", "Oglas")
                         .WithMany("KljucneReciOglasa")
-                        .HasForeignKey("OglasId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("OglasId");
                 });
 
             modelBuilder.Entity("FinalExamNew.Dal.Oglas", b =>
@@ -232,19 +224,18 @@ namespace FinalExamNew.Migrations.FinalExamDb
                 {
                     b.HasOne("FinalExamNew.Dal.Oglas", "Oglas")
                         .WithMany("Oglasavanja")
-                        .HasForeignKey("OglasId1");
+                        .HasForeignKey("OglasId");
 
                     b.HasOne("FinalExamNew.Dal.TipOglasa", "TipOglasa")
                         .WithMany("Oglasavanja")
-                        .HasForeignKey("TipOglasaId1");
+                        .HasForeignKey("TipOglasaId");
                 });
 
             modelBuilder.Entity("FinalExamNew.Dal.Slika", b =>
                 {
                     b.HasOne("FinalExamNew.Dal.Oglas", "Oglas")
                         .WithMany("Slike")
-                        .HasForeignKey("OglasId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("OglasId");
                 });
 
             modelBuilder.Entity("FinalExamNew.Dal.TipOglasa", b =>

@@ -20,5 +20,9 @@ namespace FinalExamNew.Dal
         {
             KljucnaRecId = Guid.NewGuid().ToString();
         }
+        public override string ToString()
+        {
+            return Rec; 
+        }
     }
 }

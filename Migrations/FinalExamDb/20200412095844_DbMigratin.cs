@@ -3,10 +3,41 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace FinalExamNew.Migrations.FinalExamDb
 {
-    public partial class CustomUserData2 : Migration
+    public partial class DbMigratin : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            //migrationBuilder.CreateTable(
+            //    name: "AspNetUsers",
+            //    columns: table => new
+            //    {
+            //        Id = table.Column<string>(nullable: false),
+            //        UserName = table.Column<string>(nullable: true),
+            //        NormalizedUserName = table.Column<string>(nullable: true),
+            //        Email = table.Column<string>(nullable: true),
+            //        NormalizedEmail = table.Column<string>(nullable: true),
+            //        EmailConfirmed = table.Column<bool>(nullable: false),
+            //        PasswordHash = table.Column<string>(nullable: true),
+            //        SecurityStamp = table.Column<string>(nullable: true),
+            //        ConcurrencyStamp = table.Column<string>(nullable: true),
+            //        PhoneNumber = table.Column<string>(nullable: true),
+            //        PhoneNumberConfirmed = table.Column<bool>(nullable: false),
+            //        TwoFactorEnabled = table.Column<bool>(nullable: false),
+            //        LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
+            //        LockoutEnabled = table.Column<bool>(nullable: false),
+            //        AccessFailedCount = table.Column<int>(nullable: false),
+            //        Ime = table.Column<string>(nullable: true),
+            //        Prezime = table.Column<string>(nullable: true),
+            //        DatumUclanjenja = table.Column<DateTime>(nullable: false),
+            //        JMBG = table.Column<string>(nullable: true),
+            //        DatumRodjenja = table.Column<DateTime>(nullable: false),
+            //        UlicaIBroj = table.Column<string>(nullable: true)
+            //    },
+            //    constraints: table =>
+            //    {
+            //        table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+            //    });
+
             migrationBuilder.CreateTable(
                 name: "Cene",
                 columns: table => new
@@ -84,16 +115,15 @@ namespace FinalExamNew.Migrations.FinalExamDb
                 columns: table => new
                 {
                     KljucneReciOglasaId = table.Column<string>(nullable: false),
-                    KljucnaRecId1 = table.Column<string>(nullable: true),
-                    OglasId = table.Column<string>(nullable: false)
+                    OglasId = table.Column<string>(nullable: true),
+                    KljucnaRecId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_KljucneReciOglasa", x => x.KljucneReciOglasaId);
-                    table.UniqueConstraint("AK_KljucneReciOglasa_KljucneReciOglasaId_OglasId", x => new { x.KljucneReciOglasaId, x.OglasId });
                     table.ForeignKey(
-                        name: "FK_KljucneReciOglasa_KljucnaRec_KljucnaRecId1",
-                        column: x => x.KljucnaRecId1,
+                        name: "FK_KljucneReciOglasa_KljucnaRec_KljucnaRecId",
+                        column: x => x.KljucnaRecId,
                         principalTable: "KljucnaRec",
                         principalColumn: "KljucnaRecId",
                         onDelete: ReferentialAction.Restrict);
@@ -102,7 +132,7 @@ namespace FinalExamNew.Migrations.FinalExamDb
                         column: x => x.OglasId,
                         principalTable: "Oglas",
                         principalColumn: "OglasId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -113,18 +143,17 @@ namespace FinalExamNew.Migrations.FinalExamDb
                     AdresaSlike = table.Column<string>(nullable: true),
                     NaslovSlike = table.Column<string>(nullable: true),
                     VremePostavljanjaSlike = table.Column<DateTime>(nullable: false),
-                    OglasId = table.Column<string>(nullable: false)
+                    OglasId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Slika", x => new { x.SlikaId, x.OglasId });
-                    table.UniqueConstraint("AK_Slika_OglasId_SlikaId", x => new { x.OglasId, x.SlikaId });
+                    table.PrimaryKey("PK_Slika", x => x.SlikaId);
                     table.ForeignKey(
                         name: "FK_Slika_Oglas_OglasId",
                         column: x => x.OglasId,
                         principalTable: "Oglas",
                         principalColumn: "OglasId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -132,34 +161,32 @@ namespace FinalExamNew.Migrations.FinalExamDb
                 columns: table => new
                 {
                     OglasavanjeId = table.Column<string>(nullable: false),
-                    TipOglasaId1 = table.Column<string>(nullable: true),
-                    OglasId1 = table.Column<string>(nullable: true),
-                    OglasId = table.Column<string>(nullable: false),
+                    TipOglasaId = table.Column<string>(nullable: true),
+                    OglasId = table.Column<string>(nullable: true),
                     DatumOd = table.Column<DateTime>(nullable: false),
                     DatumDo = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Oglasavanje", x => x.OglasId);
-                    table.UniqueConstraint("AK_Oglasavanje_OglasavanjeId_OglasId", x => new { x.OglasavanjeId, x.OglasId });
+                    table.PrimaryKey("PK_Oglasavanje", x => x.OglasavanjeId);
                     table.ForeignKey(
-                        name: "FK_Oglasavanje_Oglas_OglasId1",
-                        column: x => x.OglasId1,
+                        name: "FK_Oglasavanje_Oglas_OglasId",
+                        column: x => x.OglasId,
                         principalTable: "Oglas",
                         principalColumn: "OglasId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Oglasavanje_TipOglasa_TipOglasaId1",
-                        column: x => x.TipOglasaId1,
+                        name: "FK_Oglasavanje_TipOglasa_TipOglasaId",
+                        column: x => x.TipOglasaId,
                         principalTable: "TipOglasa",
                         principalColumn: "TipOglasaId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_KljucneReciOglasa_KljucnaRecId1",
+                name: "IX_KljucneReciOglasa_KljucnaRecId",
                 table: "KljucneReciOglasa",
-                column: "KljucnaRecId1");
+                column: "KljucnaRecId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_KljucneReciOglasa_OglasId",
@@ -177,14 +204,19 @@ namespace FinalExamNew.Migrations.FinalExamDb
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Oglasavanje_OglasId1",
+                name: "IX_Oglasavanje_OglasId",
                 table: "Oglasavanje",
-                column: "OglasId1");
+                column: "OglasId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Oglasavanje_TipOglasaId1",
+                name: "IX_Oglasavanje_TipOglasaId",
                 table: "Oglasavanje",
-                column: "TipOglasaId1");
+                column: "TipOglasaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Slika_OglasId",
+                table: "Slika",
+                column: "OglasId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TipOglasa_CenaId",

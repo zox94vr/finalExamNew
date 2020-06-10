@@ -27,7 +27,7 @@ namespace FinalExamNew.Data.Configuration
             builder.HasMany(o => o.KljucneReciOglasa).WithOne(kro => kro.Oglas);
             builder.HasMany(o => o.Slike).WithOne(s => s.Oglas);
             builder.HasMany(o => o.Oglasavanja).WithOne(obj => obj.Oglas);
-            builder.HasOne(o => o.User).WithMany(n => n.Oglasi);
+            builder.HasOne(o => o.User).WithMany(n => n.Oglasi).HasForeignKey(m=>m.UserId);
             builder.HasOne(o => o.Cena).WithMany(m=>m.Oglasi);
         }
     }

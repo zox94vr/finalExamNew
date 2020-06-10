@@ -15,8 +15,9 @@ namespace FinalExamNew.Dal
         public string NaslovSlike { get; set; }
         public DateTime VremePostavljanjaSlike { get; set; }
         public Oglas Oglas { get; set; }
+        //public string OglasId { get; set; }
         //[Key, Column(Order = 1)]
-        public string OglasId { get { return OglasId; }set { OglasId = Oglas.OglasId; } }
+        //public string OglasId { get { return OglasId; }set { OglasId = Oglas.OglasId; } }
         //private Slika()
         //{
         //    SlikaId= Guid.NewGuid().ToString();

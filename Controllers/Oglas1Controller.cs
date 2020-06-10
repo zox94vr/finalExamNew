@@ -22,7 +22,7 @@ namespace FinalExamNew.Controllers
         // GET: Oglas1
         public async Task<IActionResult> Index()
         {
-            var finalExamDbContext = _context.Oglasi.Include(o => o.Cena);
+            var finalExamDbContext = _context.Oglasi.Include(o => o.User);
             return View(await finalExamDbContext.ToListAsync());
         }
 
@@ -35,7 +35,7 @@ namespace FinalExamNew.Controllers
             }
 
             var oglas = await _context.Oglasi
-                .Include(o => o.Cena)
+                .Include(o => o.User)
                 .FirstOrDefaultAsync(m => m.OglasId == id);
             if (oglas == null)
             {
@@ -48,7 +48,7 @@ namespace FinalExamNew.Controllers
         // GET: Oglas1/Create
         public IActionResult Create()
         {
-            ViewData["CenaId"] = new SelectList(_context.Cene, "CenaId", "CenaId");
+            ViewData["UserId"] = new SelectList(_context.Korisnici, "Id", "Id");
             return View();
         }
 
@@ -57,7 +57,7 @@ namespace FinalExamNew.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("OglasId,Naslov,Tekst,CenaId,DatumKreiranja")] Oglas oglas)
+        public async Task<IActionResult> Create([Bind("OglasId,Naslov,Tekst,UserId,DatumKreiranja")] Oglas oglas)
         {
             if (ModelState.IsValid)
             {
@@ -65,7 +65,7 @@ namespace FinalExamNew.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CenaId"] = new SelectList(_context.Cene, "CenaId", "CenaId", oglas.CenaId);
+            ViewData["UserId"] = new SelectList(_context.Korisnici, "Id", "Id", oglas.UserId);
             return View(oglas);
         }
 
@@ -82,7 +82,7 @@ namespace FinalExamNew.Controllers
             {
                 return NotFound();
             }
-            ViewData["CenaId"] = new SelectList(_context.Cene, "CenaId", "CenaId", oglas.CenaId);
+            ViewData["UserId"] = new SelectList(_context.Korisnici, "Id", "Id", oglas.UserId);
             return View(oglas);
         }
 
@@ -91,7 +91,7 @@ namespace FinalExamNew.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("OglasId,Naslov,Tekst,CenaId,DatumKreiranja")] Oglas oglas)
+        public async Task<IActionResult> Edit(string id, [Bind("OglasId,Naslov,Tekst,UserId,DatumKreiranja")] Oglas oglas)
         {
             if (id != oglas.OglasId)
             {
@@ -118,7 +118,7 @@ namespace FinalExamNew.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CenaId"] = new SelectList(_context.Cene, "CenaId", "CenaId", oglas.CenaId);
+            ViewData["UserId"] = new SelectList(_context.Korisnici, "Id", "Id", oglas.UserId);
             return View(oglas);
         }
 
@@ -131,7 +131,7 @@ namespace FinalExamNew.Controllers
             }
 
             var oglas = await _context.Oglasi
-                .Include(o => o.Cena)
+                .Include(o => o.User)
                 .FirstOrDefaultAsync(m => m.OglasId == id);
             if (oglas == null)
             {

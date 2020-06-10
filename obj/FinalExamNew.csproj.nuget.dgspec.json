@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\finalExamNew\\FinalExamNew.csproj": {}
+    "D:\\FinalExamNew\\FinalExamNew.csproj": {}
   },
   "projects": {
-    "D:\\finalExamNew\\FinalExamNew.csproj": {
+    "D:\\FinalExamNew\\FinalExamNew.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\finalExamNew\\FinalExamNew.csproj",
+        "projectUniqueName": "D:\\FinalExamNew\\FinalExamNew.csproj",
         "projectName": "FinalExamNew",
-        "projectPath": "D:\\finalExamNew\\FinalExamNew.csproj",
+        "projectPath": "D:\\FinalExamNew\\FinalExamNew.csproj",
         "packagesPath": "C:\\Users\\Zoki\\.nuget\\packages\\",
-        "outputPath": "D:\\finalExamNew\\obj\\",
+        "outputPath": "D:\\FinalExamNew\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet\\"

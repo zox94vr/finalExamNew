@@ -12,7 +12,7 @@ namespace FinalExamNew.Data.Configuration
     {
         public void Configure(EntityTypeBuilder<Oglasavanje> builder)
         {
-            builder.HasKey(o => o.OglasId);
+            builder.HasKey(o =>  o.OglasavanjeId);
             builder.ToTable("Oglasavanje");
 
             builder.HasOne(o => o.Oglas).WithMany(o => o.Oglasavanja);

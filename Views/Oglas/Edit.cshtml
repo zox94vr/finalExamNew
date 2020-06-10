@@ -1,36 +1,77 @@
 ﻿@model FinalExamNew.Models.OglasViewModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Edit";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<div>
+    <h4>Oglas detaljno</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Naslov)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Naslov)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Tekst)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Tekst)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Cena)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Cena)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.User)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.User)
+        </dd>
+        @*<div class="row">
+                @foreach (var slika in Model.AdreseSlika)
+                {
+                    <div class="col-md-4">
 
-<h2>Create</h2>
+                        <img src="@slika" asp-append-version="true" style="max-width:100%; max-height:100%;display:block" />
+                        &nbsp;
+                    </div>
+                }
+            </div>*@
 
-<h4>Oglas</h4>
+    </dl>
+</div>
+<hr />
+
+<h2>Edit</h2>
+
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create" enctype="multipart/form-data">
+        <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Naslov" class="control-label"></label>
-                <input asp-for="Naslov" class="form-control" />
+                <input asp-for="Naslov" class="form-control" value="@Model.Naslov" />
                 <span asp-validation-for="Naslov" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Tekst" class="control-label"></label>
-                <input asp-for="Tekst" class="form-control" />
+                <input asp-for="Tekst" class="form-control" value="@Model.Tekst" />
                 <span asp-validation-for="Tekst" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Cena" class="control-label"></label>
-                <input asp-for="Cena" class="form-control" />
+                <input asp-for="Cena" class="form-control" value="@Model.Cena"/>
                 <span asp-validation-for="Cena" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="KljucneReci" class="control-label"></label>
-                <input asp-for="KljucneReci" class="form-control" />
+                <input asp-for="KljucneReci" class="form-control" value="@Model.KljucneReci"/>
                 <span asp-validation-for="KljucneReci" class="text-danger"></span>
             </div>
 
@@ -59,7 +100,7 @@
                 </dl>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Edit" class="btn btn-default" />
             </div>
         </form>
     </div>
@@ -69,3 +110,6 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

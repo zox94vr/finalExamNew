@@ -14,9 +14,10 @@ namespace FinalExamNew.Dal
         public Oglas Oglas { get; set; }
         public KljucnaRec KljucnaRec { get; set; }
         //[Key, Column(Order = 1)]
-        public string OglasId { get { return OglasId; } set { this.OglasId = Oglas.OglasId; } }
+        //public string OglasId => Oglas.OglasId;
+
         //[Key, Column(Order = 2)]
-        public string KljucnaRecId => KljucnaRec.KljucnaRecId;
+        //public string KljucnaRecId => KljucnaRec.KljucnaRecId;
 
         //private KljucneReciOglasa()
         //{

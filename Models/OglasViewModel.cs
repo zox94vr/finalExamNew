@@ -20,8 +20,10 @@ namespace FinalExamNew.Models
         [Display(Name = "Cena ")]
         public string Cena { get; set; }
         [Display(Name = "Datum vazenja od")]
+        [DataType(DataType.DateTime)]
         public DateTime DatumOd { get; set; }
         [Display(Name = "Datum vazenja do")]
+        [DataType(DataType.DateTime)]
         public DateTime DatumDo { get; set; }
         [Display(Name = "Tip oglasa")]
         public List<TipOglasa> TipoviOglasa { get; set; }
@@ -29,9 +31,10 @@ namespace FinalExamNew.Models
         public List<IFormFile> UploadFiles { get; set; }
         [Display(Name ="Kljucne reci (odvojene razmakom)")]
         public string KljucneReci { get; set; }
+        public string User { get; set; }
+        public List<string> AdreseSlika { get; set; }
         public OglasViewModel()
         {
-            UploadFiles = new List<IFormFile>();
             TipoviOglasa = new List<TipOglasa>();
 
         }

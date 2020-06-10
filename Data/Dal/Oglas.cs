@@ -20,7 +20,9 @@ namespace FinalExamNew.Dal
 
         public Cena Cena { get; set; }
 
-        public string CenaId { get { return CenaId; } set {CenaId=Cena.CenaId; } }
+        //public string CenaId { get { return CenaId; } set {CenaId=Cena.CenaId; } }
+
+        //public string CenaId => Cena.CenaId;
 
         public List<Slika> Slike { get; set; }
 
@@ -29,6 +31,7 @@ namespace FinalExamNew.Dal
         public List<Oglasavanje> Oglasavanja { get; set; }
 
         public FinalExamNewUser User { get; set; }
+        public string UserId { get; set; }
         public DateTime DatumKreiranja { get; set; }
         //private Oglas()
         //{

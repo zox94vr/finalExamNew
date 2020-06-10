@@ -14,9 +14,10 @@ namespace FinalExamNew.Dal
         public TipOglasa TipOglasa { get; set; }
         public Oglas Oglas { get; set; }
         //[Key, Column(Order=1)]
-        public string TipOglasaId => TipOglasa.TipOglasaId;
+        //public string TipOglasaId => TipOglasa.TipOglasaId;
         //[Key, Column(Order = 2)]
-        public string OglasId { get { return OglasId; } set{ OglasId = Oglas.OglasId; } }
+        //public string OglasId => Oglas.OglasId;
+
         public DateTime DatumOd { get; set; }
         public DateTime DatumDo { get; set; }
         //private Oglasavanje()

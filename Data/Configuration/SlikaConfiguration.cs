@@ -12,7 +12,7 @@ namespace FinalExamNew.Data.Configuration
     {
         public void Configure(EntityTypeBuilder<Slika> builder)
         {
-            builder.HasKey(s => new { s.SlikaId, s.OglasId });
+            builder.HasKey(s =>  s.SlikaId );
             builder.ToTable("Slika");
 
             builder.HasOne(s => s.Oglas).WithMany(o => o.Slike);

@@ -48,7 +48,7 @@ namespace FinalExamNew
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("Error");
                 app.UseHsts();
             }
 
@@ -58,6 +58,7 @@ namespace FinalExamNew
             app.UseAuthentication();
             app.UseMvc(routes =>
             {
+                //routes.Routes.Add()
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Oglas}/{action=Index}/{id?}");
