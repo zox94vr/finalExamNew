@@ -33,6 +33,7 @@ namespace FinalExamNew.Models
         public string KljucneReci { get; set; }
         public string User { get; set; }
         public List<string> AdreseSlika { get; set; }
+        public Dictionary<string,string>Slike { get; set; }
         public OglasViewModel()
         {
             TipoviOglasa = new List<TipOglasa>();

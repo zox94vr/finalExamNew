@@ -45,4 +45,3 @@ D:\FinalExamNew\obj\Debug\netcoreapp2.1\Razor\Views\Oglas\Index.cshtml.g.cs
 D:\FinalExamNew\obj\Debug\netcoreapp2.1\Razor\Views\Oglas\Create.cshtml.g.cs
 D:\FinalExamNew\obj\Debug\netcoreapp2.1\Razor\Views\Oglas\Details.cshtml.g.cs
 D:\FinalExamNew\obj\Debug\netcoreapp2.1\Razor\Views\Oglas\Edit.cshtml.g.cs
-D:\FinalExamNew\obj\Debug\netcoreapp2.1\FinalExamNew.csprojAssemblyReference.cache

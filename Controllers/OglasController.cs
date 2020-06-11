@@ -234,18 +234,44 @@ namespace FinalExamNew.Controllers
             }
 
         }
+        //GET: Oglas/DeletePicture/5
+        [Authorize]
+        public ActionResult DeletePicture(string id)
+        {
+            try
+            {
+                Slika s = _context.Slike.Where(m => m.SlikaId == id).FirstOrDefault();
+                if (s != null)
+                {
+                    if (System.IO.File.Exists(s.AdresaSlike))
+                    {
+                        System.IO.File.Delete(s.AdresaSlike);
+                    }
+                    _context.Slike.Remove(s);
+                    _context.SaveChanges();
+                }
+            }
+            catch (Exception)
+            {
 
+                throw;
+            }
+            
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
         // GET: Oglas/Edit/5
 
         [Authorize]
         public ActionResult Edit(string id)
         {
             Oglas o1 = _context.Oglasi.Where(m => m.OglasId == id).Include(a => a.Slike).Include(m => m.KljucneReciOglasa).Include(m => m.User).Include(m => m.Cena).Include(m=>m.Oglasavanja).FirstOrDefault();
+            //Dictionary<string, string> adreseSlika = new Dictionary<string, string>();
             List<string> adreseSlika = new List<string>();
             foreach (var item in o1.Slike)
             {
+                string webRoothPath = _hostingEnvironment.WebRootPath;
+                adreseSlika.Add( item.AdresaSlike.Replace(webRoothPath, "")+"@"+item.SlikaId);
             }
-            
 
             List<string> kljucneReciOglasaIds = new List<string>();
             foreach (var item in o1.KljucneReciOglasa)
@@ -266,9 +292,9 @@ namespace FinalExamNew.Controllers
                 Naslov = o1.Naslov,
                 Tekst = o1.Tekst,
                 User = o1.User.ToString(),
-                AdreseSlika = adreseSlika,
                 DatumOd=o1.Oglasavanja.FirstOrDefault().DatumOd,
                 DatumDo=o1.Oglasavanja.FirstOrDefault().DatumDo,
+                AdreseSlika=adreseSlika
                 
             };
             return View("Edit",ovm);

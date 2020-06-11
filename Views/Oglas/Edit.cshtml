@@ -66,12 +66,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="Cena" class="control-label"></label>
-                <input asp-for="Cena" class="form-control" value="@Model.Cena"/>
+                <input asp-for="Cena" class="form-control" value="@Model.Cena" />
                 <span asp-validation-for="Cena" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="KljucneReci" class="control-label"></label>
-                <input asp-for="KljucneReci" class="form-control" value="@Model.KljucneReci"/>
+                <input asp-for="KljucneReci" class="form-control" value="@Model.KljucneReci" />
                 <span asp-validation-for="KljucneReci" class="text-danger"></span>
             </div>
 
@@ -88,6 +88,18 @@
                 <label asp-for="DatumDo" class="control-label"></label>
                 <input asp-for="DatumDo" class="form-control" />
                 <span asp-validation-for="DatumDo" class="text-danger"></span>
+            </div>
+            <div class="row">
+                @foreach (var slika in Model.AdreseSlika)
+                {
+                    <div class="col-md-10">
+                        <img src="@slika.Split("@")[0]" asp-append-version="true" style="max-width:100%; max-height:100%;display:block" />
+                        &nbsp;
+                    </div>
+                    <div class="col-md-2">
+                        <button asp-action="DeletePicture" asp-route-id="@slika.Split("@")[1]">X</button>
+                    </div>
+                }
             </div>
             <div class="form-group">
                 <dl>

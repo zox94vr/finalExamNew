@@ -71,7 +71,7 @@ using FinalExamNew.Models;
             WriteLiteral("<div class=\"col-lg-12\">\r\n    <div class=\"col-lg-4\">\r\n        <h2>Oglasi</h2>\r\n    </div>\r\n    <div class=\"col-lg-4\">\r\n        ");
             EndContext();
             BeginContext(272, 437, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "0f10ce386e494d4c9cab6e6ee48e4d2e", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "562cb405a11048f187e734420f35e64e", async() => {
                 BeginContext(319, 383, true);
                 WriteLiteral(@"
             <div class=""form-group col-lg-8"" style=""padding-top:5%;"">
@@ -105,7 +105,7 @@ using FinalExamNew.Models;
             WriteLiteral("\r\n\r\n    </div>\r\n    <div class=\"col-lg-4\" style=\"text-align:right; \">\r\n        <h4 style=\"padding-top:5%;\">\r\n            ");
             EndContext();
             BeginContext(830, 37, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "07ac97f29c9e471d9170082442b31b3f", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "c37fe87aa37945109c8182097741abd7", async() => {
                 BeginContext(853, 10, true);
                 WriteLiteral("Create New");
                 EndContext();
@@ -185,7 +185,7 @@ using FinalExamNew.Models;
             WriteLiteral("                        ");
             EndContext();
             BeginContext(1646, 53, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "f09ece99817446a1b28b88d2ae74a4f5", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "d94cd875b36640eeb036fc753fd164cb", async() => {
                 BeginContext(1691, 4, true);
                 WriteLiteral("Edit");
                 EndContext();
@@ -228,7 +228,7 @@ using FinalExamNew.Models;
             WriteLiteral("                    ");
             EndContext();
             BeginContext(1745, 59, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "095a0581202c4021a1daeab28aa65c1e", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "725b87895736438c868cd8b6baea6ae2", async() => {
                 BeginContext(1793, 7, true);
                 WriteLiteral("Details");
                 EndContext();
