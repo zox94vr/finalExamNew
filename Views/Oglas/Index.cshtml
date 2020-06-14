@@ -44,22 +44,25 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Naslov)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Cena)
-                </td>
-                <td style="text-align:right;">
-                    @if (ViewBag.Owner == true)
-                    {
-                        <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> 
-                    }
-                    <a asp-action="Details" asp-route-id="@item.ID">Details</a> @*|*@
-                    @*<a asp-action="Delete" asp-route-id="@item.ID" >Delete</a>*@
-                </td>
-            </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Naslov)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Cena)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Valuta)
+            </td>
+            <td style="text-align:right;">
+                @if (ViewBag.Owner == true)
+                {
+                    <a asp-action="Edit" asp-route-id="@item.ID">Edit</a>
+                }
+                <a asp-action="Details" asp-route-id="@item.ID">Details</a> @*|*@
+                @*<a asp-action="Delete" asp-route-id="@item.ID" >Delete</a>*@
+            </td>
+        </tr>
         }
     </tbody>
 </table>

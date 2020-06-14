@@ -49,7 +49,8 @@ namespace FinalExamNew.Controllers
                     {
                         ID = oglas.OglasId,
                         Naslov = oglas.Naslov,
-                        Cena = oglas.Cena.ToString(),
+                        Cena = oglas.Cena.Vrednost,
+                        Valuta=oglas.Cena.Valuta
                     };
                     oglasiView.Add(o);
                 }
@@ -65,7 +66,8 @@ namespace FinalExamNew.Controllers
                               {
                                   ID = o.OglasId,
                                   Naslov = o.Naslov,
-                                  Cena = o.Cena.ToString(),
+                                  Cena = o.Cena.Vrednost,
+                                  Valuta=o.Cena.Valuta
                               }).ToList();
                 if (oglasi != null)
                 {
@@ -88,7 +90,8 @@ namespace FinalExamNew.Controllers
 
             OglasViewModel ovm = new OglasViewModel()
             {
-                Cena = o1.Cena.ToString(),
+                Cena = o1.Cena.Vrednost,
+                Valuta=o1.Cena.Valuta,
                 //DatumOd = o1.DatumKreiranja,
                 ID = o1.OglasId,
                 KljucneReci = String.Join(" ", o1.KljucneReciOglasa),
@@ -106,8 +109,23 @@ namespace FinalExamNew.Controllers
         [Authorize]
         public ActionResult Create()
         {
-            var tipoviOglasa = _context.TipoviOglasa;
-            ViewData["TipoviOglasa"] = new SelectList(tipoviOglasa, "TipOglasaId", "NazivTipaOglasa");
+            List<object> tipoviOglasaView = new List<object>();
+            var tipoviOglasa = _context.TipoviOglasa.Include(m=>m.Cena);
+            foreach (var item in tipoviOglasa)
+            {
+                var tip = new
+                {
+                    TipOglasaId = item.TipOglasaId,
+                    NazivOglasa = item.NazivTipaOglasa + " " + item.Cena.ToString()
+                };
+                tipoviOglasaView.Add(tip);
+            }
+            var valute = new List<String>();
+            valute.Add("RSD");
+            valute.Add("EUR");
+            valute.Add("USD");
+            ViewData["TipoviOglasa"] = new SelectList(tipoviOglasaView, "TipOglasaId", "NazivOglasa");
+            ViewData["Valute"] = new SelectList(valute,"RSD");
 
             return View();
         }
@@ -129,94 +147,22 @@ namespace FinalExamNew.Controllers
                     oglas.Naslov = oglasView.Naslov;
                     oglas.Tekst = oglasView.Tekst;
                     Cena cena = new Cena();
-                    cena.Valuta = "RSD";
+                    cena.Valuta = oglasView.Valuta;
                     cena.Vrednost = Convert.ToDecimal(oglasView.Cena);
                     oglas.Cena = cena;
-                    List<Slika> slike = new List<Slika>();
                     if (Request.Form.Files.Count > 0)
                     {
-                        for (int i = 0; i < Request.Form.Files.Count; i++)
-                        {
-                            string currentFileName = "";
-                            var fileContent = Request.Form.Files[i];
-                            string webRoothPath = _hostingEnvironment.WebRootPath;
-                            string fullFileName = webRoothPath + string.Format("/ProizvodUpload/{0}/{1}", oglas.OglasId.ToString(), fileContent.FileName);
-                            string dirName = webRoothPath + (string.Format("/ProizvodUpload/{0}/", oglas.OglasId.ToString()));
-
-                            if (!System.IO.Directory.Exists(dirName))
-                            {
-                                System.IO.Directory.CreateDirectory(dirName);
-                            }
-
-                            int countFileNames = 0;
-                            while (System.IO.File.Exists(fullFileName))
-                            {
-                                countFileNames++;
-                                fullFileName = fullFileName.Replace(System.IO.Path.GetExtension(fullFileName), "") + "_" + countFileNames.ToString() + System.IO.Path.GetExtension(fullFileName);
-                            }
-
-                            if (fileContent != null && fileContent.Length > 0)
-                            {
-                                var stream = fileContent;
-                                using (var fileStream = System.IO.File.Create(fullFileName))
-                                {
-                                    await stream.CopyToAsync(fileStream);
-                                }
-                            }
-
-                            currentFileName = System.IO.Path.GetFileName(fullFileName);
-                            Slika s = new Slika()
-                            {
-                                AdresaSlike = fullFileName,
-                                NaslovSlike = fileContent.FileName,
-                                VremePostavljanjaSlike = DateTime.Now,
-                                Oglas = oglas
-                            };
-                            slike.Add(s);
-
-                        }
+                        oglas.Slike = await SavePictures(Request.Form.Files,oglas);
                     }
-
                     // TODO: Add insert logic here
-                    oglas.Slike = slike;
-                    List<KljucneReciOglasa> kro = new List<KljucneReciOglasa>();
-                    var kljucneReci = oglasView.KljucneReci.Split(" ");
-
-                    if (kljucneReci.Length > 0)
-                    {
-                        foreach (var item in kljucneReci)
-                        {
-                            KljucnaRec kr = new KljucnaRec()
-                            {
-                                Rec = item
-                            };
-                            if (_context.KljucneReci.Where(m => m.Rec == kr.Rec).Count() > 0)
-                            {
-                                kr = _context.KljucneReci.Select(m => m).Where(m => m.Rec == kr.Rec).FirstOrDefault();
-
-                            }
-                            else
-                            {
-                                _context.KljucneReci.Add(kr);
-
-                            }
-                            KljucneReciOglasa kljucnaRecOglasa = new KljucneReciOglasa()
-                            {
-                                Oglas = oglas,
-                                KljucnaRec = kr
-                            };
-                            kro.Add(kljucnaRecOglasa);
-
-                        }
-
-                    }
-                    oglas.KljucneReciOglasa = kro;
+                    
+                    oglas.KljucneReciOglasa = AddKljucneReci(oglasView,oglas);
                     List<Oglasavanje> oglasavanja = new List<Oglasavanje>();
                     Oglasavanje oglasavanje = new Oglasavanje()
                     {
                         DatumOd = oglasView.DatumOd,
                         DatumDo = oglasView.DatumDo,
-                        TipOglasa = _context.TipoviOglasa.Where(m => m.TipOglasaId == oglasView.TipoviOglasa.ToString()).FirstOrDefault()
+                        TipOglasa = _context.TipoviOglasa.Where(m => m.TipOglasaId == oglasView.TipOglasa.ToString()).FirstOrDefault()
                     };
                     oglasavanja.Add(oglasavanje);
                     oglas.Oglasavanja = oglasavanja;
@@ -233,6 +179,59 @@ namespace FinalExamNew.Controllers
                 return View();
             }
 
+        }
+        private async Task<List<Slika>> SavePictures(IFormFileCollection formFiles,Oglas oglas)
+        {
+            try
+            {
+                List<Slika> slike = new List<Slika>();
+                for (int i = 0; i < formFiles.Count; i++)
+                {
+                    string currentFileName = "";
+                    var fileContent = formFiles[i];
+                    string webRoothPath = _hostingEnvironment.WebRootPath;
+                    string fullFileName = webRoothPath + string.Format("/ProizvodUpload/{0}/{1}", oglas.OglasId.ToString(), fileContent.FileName);
+                    string dirName = webRoothPath + (string.Format("/ProizvodUpload/{0}/", oglas.OglasId.ToString()));
+
+                    if (!System.IO.Directory.Exists(dirName))
+                    {
+                        System.IO.Directory.CreateDirectory(dirName);
+                    }
+
+                    int countFileNames = 0;
+                    while (System.IO.File.Exists(fullFileName))
+                    {
+                        countFileNames++;
+                        fullFileName = fullFileName.Replace(System.IO.Path.GetExtension(fullFileName), "") + "_" + countFileNames.ToString() + System.IO.Path.GetExtension(fullFileName);
+                    }
+
+                    if (fileContent != null && fileContent.Length > 0)
+                    {
+                        var stream = fileContent;
+                        using (var fileStream = System.IO.File.Create(fullFileName))
+                        {
+                            await stream.CopyToAsync(fileStream);
+                        }
+                    }
+
+                    currentFileName = System.IO.Path.GetFileName(fullFileName);
+                    Slika s = new Slika()
+                    {
+                        AdresaSlike = fullFileName,
+                        NaslovSlike = fileContent.FileName,
+                        VremePostavljanjaSlike = DateTime.Now,
+                        Oglas = oglas
+                    };
+                    slike.Add(s);
+
+                }
+                return slike;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
         //GET: Oglas/DeletePicture/5
         [Authorize]
@@ -260,11 +259,52 @@ namespace FinalExamNew.Controllers
             return Redirect(Request.Headers["Referer"].ToString());
         }
         // GET: Oglas/Edit/5
+        private List<KljucneReciOglasa> AddKljucneReci(OglasViewModel oglasView,Oglas oglas)
+        {
+            List<KljucneReciOglasa> kro = new List<KljucneReciOglasa>();
+            var kljucneReci = oglasView.KljucneReci.Split(" ");
 
+            if (kljucneReci.Length > 0)
+            {
+                foreach (var item in kljucneReci)
+                {
+                    KljucnaRec kr = new KljucnaRec()
+                    {
+                        Rec = item
+                    };
+                    if (_context.KljucneReci.Where(m => m.Rec == kr.Rec).Count() > 0)
+                    {
+                        kr = _context.KljucneReci.Select(m => m).Where(m => m.Rec == kr.Rec).FirstOrDefault();
+
+                    }
+                    else
+                    {
+                        _context.KljucneReci.Add(kr);
+
+                    }
+                    KljucneReciOglasa kljucnaRecOglasa = new KljucneReciOglasa()
+                    {
+                        Oglas = oglas,
+                        KljucnaRec = kr
+                    };
+                    kro.Add(kljucnaRecOglasa);
+
+                }
+
+            }
+            return kro;
+        }
         [Authorize]
         public ActionResult Edit(string id)
         {
+            var valute = new List<String>();
+            valute.Add("RSD");
+            valute.Add("EUR");
+            valute.Add("USD");
+
             Oglas o1 = _context.Oglasi.Where(m => m.OglasId == id).Include(a => a.Slike).Include(m => m.KljucneReciOglasa).Include(m => m.User).Include(m => m.Cena).Include(m=>m.Oglasavanja).FirstOrDefault();
+            ViewData["Valute"] = new SelectList(valute, o1.Cena.Valuta);
+
             //Dictionary<string, string> adreseSlika = new Dictionary<string, string>();
             List<string> adreseSlika = new List<string>();
             foreach (var item in o1.Slike)
@@ -280,12 +320,24 @@ namespace FinalExamNew.Controllers
             }
             List<string> kljucneReci = new List<string>();
             kljucneReci = _context.KljucneReciOglasa.Where(m => kljucneReciOglasaIds.Contains(m.KljucneReciOglasaId)).Include(m => m.KljucnaRec).OrderByDescending(x=>x.KljucnaRec.KljucnaRecId).Select(m => m.KljucnaRec.Rec).ToList();
-            var tipoviOglasa = _context.TipoviOglasa.ToList();
+            var tipoviOglasa = _context.TipoviOglasa.Include(m=>m.Cena).ToList();
+            List<object> tipoviOglasaView = new List<object>();
+            foreach (var item in tipoviOglasa)
+            {
+                var tip = new
+                {
+                    TipOglasaId = item.TipOglasaId,
+                    NazivOglasa = item.NazivTipaOglasa + " " + item.Cena.ToString()
+                };
+                tipoviOglasaView.Add(tip);
+            }
+
             TipOglasa selectedTipOglasa = tipoviOglasa.Where(m => m.TipOglasaId == o1.Oglasavanja.FirstOrDefault().TipOglasa.TipOglasaId).FirstOrDefault();
-            ViewData["TipoviOglasa"] = new SelectList(tipoviOglasa, "TipOglasaId", "NazivTipaOglasa",selectedTipOglasa.TipOglasaId);
+            ViewData["TipoviOglasa"] = new SelectList(tipoviOglasaView, "TipOglasaId", "NazivOglasa", selectedTipOglasa.TipOglasaId);
             OglasViewModel ovm = new OglasViewModel()
             {
-                Cena = o1.Cena.ToString(),
+                Cena = o1.Cena.Vrednost,
+                Valuta=o1.Cena.Valuta,
                 //DatumOd = o1.DatumKreiranja,
                 ID = o1.OglasId,
                 KljucneReci = String.Join(" ", kljucneReci),
@@ -304,14 +356,28 @@ namespace FinalExamNew.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(string id, OglasViewModel oglas)
+        public async Task<ActionResult> Edit(string id, OglasViewModel oglasView)
         {
             try
             {
                 // TODO: Add update logic here
+                Oglas oglas = _context.Oglasi.Where(m => m.OglasId == id).Include(a => a.Slike).Include(m => m.KljucneReciOglasa).Include(m => m.User).Include(m => m.Cena).Include(m => m.Oglasavanja).FirstOrDefault();
+                if (oglas != null)
+                {
+                    if (Request.Form.Files.Count > 0)
+                    {
+                        oglas.Slike.AddRange( await SavePictures(Request.Form.Files, oglas));
+                    }
+                }
+                oglas.Naslov = oglasView.Naslov;
+                oglas.Tekst = oglasView.Tekst;
+                oglas.Cena.Vrednost = oglasView.Cena;
+                oglas.Cena.Valuta = oglasView.Valuta;
+                oglas.Oglasavanja[0].DatumOd = oglasView.DatumOd;
+                oglas.Oglasavanja[0].DatumDo = oglasView.DatumDo;
+                oglas.KljucneReciOglasa = AddKljucneReci(oglasView, oglas);
 
-
-
+                await _context.SaveChangesAsync();
 
                 return RedirectToAction(nameof(Index));
             }
@@ -360,7 +426,8 @@ namespace FinalExamNew.Controllers
                     {
                         ID = oglas.OglasId,
                         Naslov = oglas.Naslov,
-                        Cena = oglas.Cena.ToString(),
+                        Cena = oglas.Cena.Vrednost,
+                        Valuta=oglas.Cena.Valuta
                     };
                     oglasiView.Add(o);
                 }
@@ -376,7 +443,8 @@ namespace FinalExamNew.Controllers
                               {
                                   ID = o.OglasId,
                                   Naslov = o.Naslov,
-                                  Cena = o.Cena.ToString(),
+                                  Cena = o.Cena.Vrednost,
+                                  Valuta = o.Cena.Valuta
                               }).ToList();
                 if (oglasi != null)
                 {

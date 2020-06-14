@@ -18,14 +18,19 @@ namespace FinalExamNew.Models
         [Display(Name = "Tekst oglasa")]
         public string Tekst { get; set; }
         [Display(Name = "Cena ")]
-        public string Cena { get; set; }
+        public decimal Cena { get; set; }
+        [Display(Name = "Valuta ")]
+        public string Valuta { get; set; }
+
         [Display(Name = "Datum vazenja od")]
         [DataType(DataType.DateTime)]
         public DateTime DatumOd { get; set; }
         [Display(Name = "Datum vazenja do")]
         [DataType(DataType.DateTime)]
         public DateTime DatumDo { get; set; }
+
         [Display(Name = "Tip oglasa")]
+        public string TipOglasa { get; set; }
         public List<TipOglasa> TipoviOglasa { get; set; }
         [Display(Name = "Ubaci slike")]
         public List<IFormFile> UploadFiles { get; set; }

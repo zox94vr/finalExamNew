@@ -74,10 +74,13 @@
                 <input asp-for="KljucneReci" class="form-control" value="@Model.KljucneReci" />
                 <span asp-validation-for="KljucneReci" class="text-danger"></span>
             </div>
-
+            <div class="form-group">
+                <label asp-for="Valuta" class="control-label"></label>
+                <select class="form-control" asp-items="ViewBag.Valute" asp-for="Valuta"></select>
+            </div>
             <div class="form-group">
                 <label asp-for="TipoviOglasa" class="control-label"></label>
-                <select class="form-control" asp-items="ViewBag.TipoviOglasa"></select>
+                <select class="form-control" asp-items="ViewBag.TipoviOglasa" asp-for="TipOglasa"></select>
             </div>
             <div class="form-group">
                 <label asp-for="DatumOd" class="control-label"></label>
